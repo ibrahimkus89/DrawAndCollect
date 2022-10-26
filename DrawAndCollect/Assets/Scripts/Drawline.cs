@@ -10,6 +10,7 @@ public class Drawline : MonoBehaviour
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] EdgeCollider2D edgeCollider;
     public List<Vector2> fingerPosList;
+    public List<GameObject> liness;
     void Start()
     {
         
@@ -36,6 +37,7 @@ public class Drawline : MonoBehaviour
     void CreateLine()
     {
         line = Instantiate(linePrefab,Vector2.zero,Quaternion.identity);
+        liness.Add(line);
         lineRenderer = line.GetComponent<LineRenderer>();
         edgeCollider = line.GetComponent<EdgeCollider2D>();
         fingerPosList.Clear();
@@ -55,5 +57,15 @@ public class Drawline : MonoBehaviour
         lineRenderer.SetPosition(lineRenderer.positionCount-1,GetFingerPos);
         edgeCollider.points = fingerPosList.ToArray();
 
+    }
+
+    public void Continue()
+    {
+        foreach (var item in liness)
+        {
+            Destroy(item.gameObject);
+        }
+
+        liness.Clear();
     }
 }
