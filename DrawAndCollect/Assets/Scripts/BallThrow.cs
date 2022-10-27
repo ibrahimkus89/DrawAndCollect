@@ -66,4 +66,6 @@ public class BallThrow : MonoBehaviour
         klt = false;
         Bucket.SetActive(true);
     }
+
+
 }

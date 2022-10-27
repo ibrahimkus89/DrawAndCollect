@@ -19,17 +19,21 @@ public class Drawline : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Time.timeScale!=0)
         {
-            CreateLine();
-        }
-        if (Input.GetMouseButton(0))
-        {
-            Vector2 fingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            if (Vector2.Distance(fingerPos,fingerPosList[^1]) >.1f)
+            if (Input.GetMouseButtonDown(0))
             {
-                LineUpdate(fingerPos);
+                CreateLine();
+            }
+            if (Input.GetMouseButton(0))
+            {
+                Vector2 fingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                if (Vector2.Distance(fingerPos, fingerPosList[^1]) > .1f)
+                {
+                    LineUpdate(fingerPos);
+                }
             }
         }
     }

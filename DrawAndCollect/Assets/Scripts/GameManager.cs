@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] Panels;
     [SerializeField] private TextMeshProUGUI[] ScoreTexts;
 
-
+    int GBallNumbers;
     void Start()
     {
+        Time.timeScale = 0;
+        
         if (PlayerPrefs.HasKey("BestScore"))
         {
             ScoreTexts[0].text = PlayerPrefs.GetInt("BestScore").ToString();
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
  
     public void Continue()
     {
+        GBallNumbers++;
         _ballThrow.Continue();
         _drawline.Continue();
     }
@@ -41,17 +44,31 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("LOST");
+
+        ScoreTexts[1].text = PlayerPrefs.GetInt("BestScore").ToString();
+        ScoreTexts[2].text = GBallNumbers.ToString();
+
+        if (GBallNumbers>PlayerPrefs.GetInt("BestScore"))
+        {
+            PlayerPrefs.SetInt("BestScore", GBallNumbers);
+            //play effect
+           
+        }
+        
     }
 
 
     public void GameStart()
     {
+        
         Panels[0].SetActive(false);
+        Time.timeScale = 1;
         _ballThrow.GameStart();
     }
 
     public void PlayAgain()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
