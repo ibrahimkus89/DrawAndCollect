@@ -16,7 +16,7 @@ public class BallThrow : MonoBehaviour
     bool klt;
 
 
-    private void Start()
+    public void GameStart()
     {
         StartCoroutine(BallShootingSystem());
     }
@@ -60,6 +60,7 @@ public class BallThrow : MonoBehaviour
     }
 
 
+   
     public void Continue()
     {
         klt = false;
