@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Drawline _drawline;
     [SerializeField] private GameObject[] Panels;
     [SerializeField] private TextMeshProUGUI[] ScoreTexts;
+    [SerializeField] private AudioSource[] Sounds;
+
 
     int GBallNumbers;
     void Start()
@@ -37,13 +39,18 @@ public class GameManager : MonoBehaviour
     public void Continue()
     {
         GBallNumbers++;
+        Sounds[0].Play();
         _ballThrow.Continue();
         _drawline.Continue();
     }
 
     public void GameOver()
     {
-        Debug.Log("LOST");
+        Sounds[1].Play();
+        Panels[1].SetActive(true);
+        Panels[2].SetActive(false);
+
+
 
         ScoreTexts[1].text = PlayerPrefs.GetInt("BestScore").ToString();
         ScoreTexts[2].text = GBallNumbers.ToString();
@@ -64,6 +71,7 @@ public class GameManager : MonoBehaviour
         Panels[0].SetActive(false);
         Time.timeScale = 1;
         _ballThrow.GameStart();
+        Panels[2].SetActive(true);
     }
 
     public void PlayAgain()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Drawline : MonoBehaviour
 {
@@ -11,15 +12,21 @@ public class Drawline : MonoBehaviour
     [SerializeField] EdgeCollider2D edgeCollider;
     public List<Vector2> fingerPosList;
     public List<GameObject> liness;
+    [SerializeField] private TextMeshProUGUI rightToDrawText;
+
+    int rightToDraw;
+   
     void Start()
     {
         
+        rightToDraw = 3;
+        rightToDrawText.text = rightToDraw.ToString();
     }
 
     
     void Update()
     {
-        if (Time.timeScale!=0)
+        if (Time.timeScale!=0 && rightToDraw !=0)
         {
 
             if (Input.GetMouseButtonDown(0))
@@ -34,6 +41,16 @@ public class Drawline : MonoBehaviour
                 {
                     LineUpdate(fingerPos);
                 }
+            }
+        }
+
+        if (liness.Count !=0 && rightToDraw !=0)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                rightToDraw--;
+                rightToDrawText.text = rightToDraw.ToString();
+
             }
         }
     }
@@ -71,5 +88,13 @@ public class Drawline : MonoBehaviour
         }
 
         liness.Clear();
+        rightToDraw=3;
+        rightToDrawText.text = rightToDraw.ToString();
+
+    }
+
+    public void StartDraw()
+    {
+        rightToDraw = 3;
     }
 }

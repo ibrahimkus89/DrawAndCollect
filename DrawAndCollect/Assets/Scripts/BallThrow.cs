@@ -14,6 +14,8 @@ public class BallThrow : MonoBehaviour
     int activeBallIndex;
     int randomBucketIndex;
     bool klt;
+    public static int numberOfBallsThrown;
+    public static int TaSys;
 
 
     public void GameStart()
@@ -29,28 +31,29 @@ public class BallThrow : MonoBehaviour
             if (!klt)
             {
                 yield return new WaitForSeconds(.5f);
-                Balls[activeBallIndex].transform.position = BallThrowCenter.transform.position;
-                Balls[activeBallIndex].SetActive(true);
 
-                float angle = Random.Range(70f, 110f);
-                Vector2 pos = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
-                Balls[activeBallIndex].gameObject.GetComponent<Rigidbody2D>().AddForce(pos * 750);
-
-                if (activeBallIndex != Balls.Length - 1)
+                if (TaSys !=0 && TaSys %5 ==0)
                 {
-                    activeBallIndex++;
-
+                    for (int i = 0; i < 2; i++)
+                    {
+                        BallThrowAndSettings();
+                    }
+                    numberOfBallsThrown = 2;
+                    TaSys++;
                 }
                 else
                 {
-                    activeBallIndex = 0;
+                    BallThrowAndSettings();
+                    numberOfBallsThrown = 1;
+                    TaSys++;
                 }
-
+                
                 yield return new WaitForSeconds(0.7f);
                 randomBucketIndex = Random.Range(0, BucketPoints.Length - 1);
                 Bucket.transform.position = BucketPoints[randomBucketIndex].transform.position;
                 Bucket.SetActive(true);
                 klt = true;
+                Invoke("BallControl",5f);
             }
             else
             {
@@ -63,9 +66,53 @@ public class BallThrow : MonoBehaviour
    
     public void Continue()
     {
-        klt = false;
-        Bucket.SetActive(true);
+        if (numberOfBallsThrown==1)
+        {
+            klt = false;
+            Bucket.SetActive(false);
+            CancelInvoke();
+            numberOfBallsThrown--;
+        }
+        else
+        {
+            numberOfBallsThrown--;
+        }
+
+       
     }
 
+    float GetAngle(float Value1,float Value2)
+    {
+        return Random.Range(Value1, Value2);
 
+    }
+
+    Vector3 GetPosition(float glnAngle)
+    {
+       return Quaternion.AngleAxis(glnAngle, Vector3.forward) * Vector3.right;
+    }
+    void BallControl()
+    {
+        if (klt)
+        {
+            GetComponent<GameManager>().GameOver();
+        }
+    }
+
+    void BallThrowAndSettings()
+    {
+        Balls[activeBallIndex].transform.position = BallThrowCenter.transform.position;
+        Balls[activeBallIndex].SetActive(true);
+        Balls[activeBallIndex].gameObject.GetComponent<Rigidbody2D>().AddForce(GetPosition(GetAngle(70f, 110f)) * 750);
+
+        if (activeBallIndex != Balls.Length - 1)
+        {
+            activeBallIndex++;
+
+        }
+        else
+        {
+            activeBallIndex = 0;
+        }
+    }
 }
