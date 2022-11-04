@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] Panels;
     [SerializeField] private TextMeshProUGUI[] ScoreTexts;
     [SerializeField] private AudioSource[] Sounds;
+    [SerializeField] private ParticleSystem BucketGr;
+    [SerializeField] private ParticleSystem BestScore;
 
 
     int GBallNumbers;
@@ -36,8 +38,13 @@ public class GameManager : MonoBehaviour
 
   
  
-    public void Continue()
+    public void Continue(Vector2 pos)
     {
+        BucketGr.transform.position = pos;
+        BucketGr.gameObject.SetActive(true);
+        BucketGr.Play();
+
+
         GBallNumbers++;
         Sounds[0].Play();
         _ballThrow.Continue();
@@ -49,6 +56,7 @@ public class GameManager : MonoBehaviour
         Sounds[1].Play();
         Panels[1].SetActive(true);
         Panels[2].SetActive(false);
+        Time.timeScale = 0;
 
 
 
@@ -58,7 +66,8 @@ public class GameManager : MonoBehaviour
         if (GBallNumbers>PlayerPrefs.GetInt("BestScore"))
         {
             PlayerPrefs.SetInt("BestScore", GBallNumbers);
-            //play effect
+            BestScore.gameObject.SetActive(true);
+            BestScore.Play();
            
         }
         
